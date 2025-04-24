@@ -2,12 +2,10 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
-#include <chrono>
 #include <algorithm>
 #include <iomanip>
 
 using namespace std;
-using namespace chrono;
 
 void quickSort(vector<int>& arr, int low, int high, int& comparacoes, int& trocas) {
     if (low < high) {
@@ -70,18 +68,27 @@ void testarQuickSort(int tamanho, string tipo, int execucoes) {
         else vetor = gerarAleatorio(tamanho);
 
         int comparacoes = 0, trocas = 0;
-        auto inicio = high_resolution_clock::now();
-        quickSort(vetor, 0, vetor.size() - 1, comparacoes, trocas);
-        auto fim = high_resolution_clock::now();
 
-        double duracao = duration<double, milli>(fim - inicio).count();
+        clock_t inicio = clock();
+        quickSort(vetor, 0, vetor.size() - 1, comparacoes, trocas);
+        clock_t fim = clock();
+
+        double duracao = double(fim - inicio) / CLOCKS_PER_SEC * 1000.0; // milissegundos
         tempos.push_back(duracao);
+
+        //printf("Tempo execução #%d: %.4f ms\n", i + 1, duracao);
+
         totalComp += comparacoes;
         totalTrocas += trocas;
     }
 
     cout << "Tipo: " << tipo << ", Tamanho: " << tamanho << "\n";
-    cout << "Média (sem extremos) tempo (ms): " << mediaSemExtremos(tempos) << "\n";
+
+    if (execucoes > 1)
+        cout << "Média (sem extremos) tempo (ms): " << mediaSemExtremos(tempos) << "\n";
+    else
+        cout << "Tempo (ms): " << tempos[0] << "\n";
+
     cout << "Média comparações: " << totalComp / static_cast<double>(execucoes) << "\n";
     cout << "Média trocas: " << totalTrocas / static_cast<double>(execucoes) << "\n\n";
 }
