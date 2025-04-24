@@ -58,11 +58,11 @@ double mediaSemExtremos(vector<double>& tempos) {
     return soma / (tempos.size() - 2);
 }
 
-void testarQuickSort(int tamanho, string tipo) {
+void testarQuickSort(int tamanho, string tipo, int execucoes) {
     vector<double> tempos;
     int totalComp = 0, totalTrocas = 0;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < execucoes; i++) {
         vector<int> vetor;
 
         if (tipo == "ordenado") vetor = gerarOrdenado(tamanho);
@@ -82,8 +82,8 @@ void testarQuickSort(int tamanho, string tipo) {
 
     cout << "Tipo: " << tipo << ", Tamanho: " << tamanho << "\n";
     cout << "Média (sem extremos) tempo (ms): " << mediaSemExtremos(tempos) << "\n";
-    cout << "Média comparações: " << totalComp / 10.0 << "\n";
-    cout << "Média trocas: " << totalTrocas / 10.0 << "\n\n";
+    cout << "Média comparações: " << totalComp / static_cast<double>(execucoes) << "\n";
+    cout << "Média trocas: " << totalTrocas / static_cast<double>(execucoes) << "\n\n";
 }
 
 int main() {
@@ -92,9 +92,9 @@ int main() {
     vector<int> tamanhos = {100, 1000, 5000};
 
     for (int tam : tamanhos) {
-        testarQuickSort(tam, "ordenado");
-        testarQuickSort(tam, "inverso");
-        testarQuickSort(tam, "aleatorio");
+        testarQuickSort(tam, "ordenado", 1);
+        testarQuickSort(tam, "inverso", 1);
+        testarQuickSort(tam, "aleatorio", 10);
     }
 
     return 0;
